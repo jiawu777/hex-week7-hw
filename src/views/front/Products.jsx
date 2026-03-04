@@ -6,7 +6,7 @@ const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH;
 
-const Products = ({ handleQty, listLoadingState, openModal})=>{
+const Products = ({ handleQty, addCartLoadingState, openModal,moreLoadingState})=>{
 const [productData,setProductData]=useState([]);
 
 
@@ -56,13 +56,19 @@ const getProducts = async()=>{
                 <td>
                     <div className="btn-group btn-group-sm">
                     <button type="button" className="btn btn-outline-secondary"
-                    onClick={()=>{openModal(item)}}>
+                    onClick={()=>{openModal(item)}}
+                    disabled={moreLoadingState.includes(item.id)}>
+                        {moreLoadingState.includes(item.id) ? (
+                            <i className="fas fa-spinner fa-pulse"></i>
+                        ) : (
+                            <i className="fas fa-shopping-cart"></i>
+                        )}
                         查看更多
                     </button>
                     <button type="button" className="btn btn-outline-danger" onClick={()=>{
                         handleQty(item.id);}}
-                        disabled={listLoadingState.includes(item.id)}>
-                        {listLoadingState.includes(item.id) ? (
+                        disabled={addCartLoadingState.includes(item.id)}>
+                        {addCartLoadingState.includes(item.id) ? (
                             <i className="fas fa-spinner fa-pulse"></i>
                         ) : (
                             <i className="fas fa-shopping-cart"></i>

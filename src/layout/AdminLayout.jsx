@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom"
 
-const BackendLayout = ()=>{
+const AdminLayout = ()=>{
     return(
         <>
             <header>
@@ -22,4 +22,4 @@ const BackendLayout = ()=>{
     )
 }
 
-export default BackendLayout
+export default AdminLayout

@@ -46,13 +46,13 @@ const onSubmit = async (formData) => {
       <h1>請先登入</h1>
       <form action="submit" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-floating mb-3">
-            <input type="email" className="form-control" name="username" placeholder="name@example.com"
+            <input id="username" type="email" className="form-control" name="username" placeholder="name@example.com"
              {...register("username",validation.email)} />
                 <label htmlFor="username">Username</label>
                 <p className="text-danger">{errors.email?.message}</p>
                 </div>
                 <div className="form-floating">
-            <input type="password" className="form-control" name="password" placeholder="Password"  
+            <input id="password" type="password" className="form-control" name="password" placeholder="Password"  
             {...register("password",validation.password)} />
                 <label htmlFor="password">Password</label>
                 <p className="text-danger">{errors.password?.message}</p>

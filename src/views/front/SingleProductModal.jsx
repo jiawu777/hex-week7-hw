@@ -1,5 +1,5 @@
 
-const SingleProductModal = ({productData, closeModal,handleQty, count, setCount})=>{
+const SingleProductModal = ({productData, closeModal,handleQty, count, setCount, addCartLoadingState})=>{
 
     return (
    <div className="modal" id="productModal">
@@ -53,8 +53,16 @@ const SingleProductModal = ({productData, closeModal,handleQty, count, setCount}
           </div>
         </div>
         <div className="modal-footer">
-          <button type="button" className="btn btn-primary" onClick={()=>{
-            handleQty(productData.id,count)}}>
+          <button type="button" className="btn btn-primary" 
+                        onClick={()=>{
+                        handleQty(productData.id,count);}}
+                        disabled={addCartLoadingState.includes(productData.id)}>
+                        {addCartLoadingState.includes(productData.id) ? (
+                            <i className="fas fa-spinner fa-pulse"></i>
+                        ) : (
+                            <i className="fas fa-shopping-cart"></i>
+                        )}
+
             加入購物車
           </button>
         </div>

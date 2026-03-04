@@ -6,27 +6,32 @@ const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH;
 
 
-const Cart=({getCartItems, cart, updateCartQty, setCount}) => {
+const Cart=({getCartItems, cart, updateCartQty, setCount,delAllLoadingState,setDelAllLoadingState,delLoadingState,setDelLoadingState}) => {
 
     const deleteAllCartItems = async()=>{
+      setDelAllLoadingState(1);
         try {
             await axios.delete(`${API_BASE}/api/${API_PATH}/carts`);
             setCount(1);
             await getCartItems();
         } catch (error) {
             alert("清空購物車失敗:" + error.response.data.message);
-        }
+        }finally{
+            setDelAllLoadingState(0);}
     }
 
 
         const deleteCartItem = async(id)=>{
 
         try {
+            setDelLoadingState((prev)=>[...prev,id]);
             await axios.delete(`${API_BASE}/api/${API_PATH}/cart/${id}`);
             setCount(1);
             await getCartItems();
         } catch (error) {
             alert("刪除商品失敗:" + error.response.data.message);
+        }finally{
+            setDelLoadingState((prev)=>prev.filter((i)=> i !== id));
         }
     }
 
@@ -39,9 +44,13 @@ const Cart=({getCartItems, cart, updateCartQty, setCount}) => {
         <div className="container">
   <h2>購物車列表</h2>
   <div className="text-end mt-4">
-    <button type="button" className="btn btn-outline-danger" onClick={()=>{deleteAllCartItems()}}>
+    {cart?.carts?.length > 0 &&
+    <button type="button" className="btn btn-outline-danger" onClick={()=>{deleteAllCartItems()}} disabled={delAllLoadingState}>
+      {delAllLoadingState? ( <i className="fas fa-spinner fa-pulse"></i>) : (<i className="fas fa-shopping-cart"></i>)}
       清空購物車
     </button>
+    }
+    
   </div>
   <table className="table">
     <thead>
@@ -61,7 +70,7 @@ const Cart=({getCartItems, cart, updateCartQty, setCount}) => {
         <td>
             <div className="input-group mb-3">
             <input type="number" className="form-control" 
-            aria-label="qty" aria-describedby="basic-addon2"  defaultValue={cartItem.qty} value={cartItem.qty} 
+            aria-label="qty" aria-describedby="basic-addon2" value={cartItem.qty} 
             onChange={(e)=>{if(e.target.value<1 || e.target.value>10)return;
             updateCartQty(cartItem.id,cartItem.product_id,e.target.value)}}/>
             <span className="input-group-text" id="basic-addon2">{cartItem.product.unit}</span>
@@ -69,7 +78,14 @@ const Cart=({getCartItems, cart, updateCartQty, setCount}) => {
         </td>
         <td>{cartItem.total}</td>
         <td>
-          <button type="button" className="btn btn-outline-danger btn-sm" onClick={()=>{deleteCartItem(cartItem.id)}}>
+          <button type="button" className="btn btn-outline-danger btn-sm" onClick={()=>{
+                        deleteCartItem(cartItem.id);}}
+                        disabled={delLoadingState.includes(cartItem.id)}>
+                        {delLoadingState.includes(cartItem.id) ? (
+                            <i className="fas fa-spinner fa-pulse"></i>
+                        ) : (
+                            <i className="fas fa-shopping-cart"></i>
+                        )}
             刪除
           </button>
         </td>
