@@ -13,7 +13,7 @@ const [productData,setProductData]=useState([]);
 const getProducts = async()=>{
         try {
             const res = await axios.get(`${API_BASE}/api/${API_PATH}/products/all`);
-            setProductData(res.data.products);
+            setProductData(res.data?.products);
         } catch (error) {
             alert("取得商品資料失敗:" + error.response.data.message);
         }
@@ -57,8 +57,8 @@ const getProducts = async()=>{
                     <div className="btn-group btn-group-sm">
                     <button type="button" className="btn btn-outline-secondary"
                     onClick={()=>{openModal(item)}}
-                    disabled={moreLoadingState.includes(item.id)}>
-                        {moreLoadingState.includes(item.id) ? (
+                    disabled={moreLoadingState?.includes(item.id)}>
+                        {moreLoadingState?.includes(item.id) ? (
                             <i className="fas fa-spinner fa-pulse"></i>
                         ) : (
                             <i className="fas fa-shopping-cart"></i>
@@ -67,8 +67,8 @@ const getProducts = async()=>{
                     </button>
                     <button type="button" className="btn btn-outline-danger" onClick={()=>{
                         handleQty(item.id);}}
-                        disabled={addCartLoadingState.includes(item.id)}>
-                        {addCartLoadingState.includes(item.id) ? (
+                        disabled={addCartLoadingState?.includes(item.id)}>
+                        {addCartLoadingState?.includes(item.id) ? (
                             <i className="fas fa-spinner fa-pulse"></i>
                         ) : (
                             <i className="fas fa-shopping-cart"></i>

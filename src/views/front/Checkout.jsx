@@ -132,9 +132,9 @@ const Checkout = () => {
 
     const openModal = async(product)=>{
         try {
-            setProductData(product);
-            const cartItem = await(cart?.carts?.find((cartItem)=> cartItem.product_id === product.id));
             setMoreLoadingState((prevState)=>([...prevState,product.id]));
+            setProductData(product);
+            const cartItem = cart?.carts?.find((cartItem)=> cartItem.product_id === product.id);
             setCount(cartItem ? cartItem.qty : 1);
             await getSingleProduct(product.id);
             productModalRef.current.show();
@@ -163,7 +163,7 @@ const Checkout = () => {
     return (
         <> 
         <SingleProductModal productData={productData} closeModal={closeModal} handleQty={handleQty} count={count} setCount={setCount} addCartLoadingState={addCartLoadingState}/>
-        <Products openModal={openModal} cart={cart} getCartItems={getCartItems} updateCartQty={updateCartQty} addNewCartItem={addNewCartItem} handleQty={handleQty} addCartLoadingState={addCartLoadingState} moreLoadingState={moreLoadingState} count={count} setCount={setCount}/>
+        <Products openModal={openModal} handleQty={handleQty} addCartLoadingState={addCartLoadingState} moreLoadingState={moreLoadingState} />
         < br/>
         <Cart getCartItems={getCartItems} cart={cart} updateCartQty={updateCartQty} count={count} setCount={setCount} delAllLoadingState={delAllLoadingState} setDelAllLoadingState={setDelAllLoadingState} delLoadingState={delLoadingState} setDelLoadingState={setDelLoadingState}/>
         <div className="container" style={{width: "600px"}}>

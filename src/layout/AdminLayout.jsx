@@ -9,7 +9,10 @@ const AdminLayout = () => {
                         <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                             <ul className="navbar-nav">
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to="/admin/products">產品列表</NavLink>
+                                    <NavLink className="nav-link" to="/admin/products">後台產品列表</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/admin/orders">後台訂單列表</NavLink>
                                 </li>
                             </ul>
                         </div>
