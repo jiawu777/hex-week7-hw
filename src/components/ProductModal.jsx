@@ -1,10 +1,13 @@
 import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { createAsyncMessage } from "../slice/messageSlice";
 
 const ProductModal =({API_BASE,API_PATH,modalType,templateProduct,closeModal,getProducts,productModalRef,handleFileChange,pagination})=>{
 const defaultImageUrl="https://storage.googleapis.com/vue-course-api.appspot.com/jia-hex/1770819402945.jpg";
 const {current_page = 1} = pagination;
+const dispatch = useDispatch();
 const [tempData,setTempData] = React.useState(templateProduct);
 const [errors,setErrors] = useState({});
   useEffect(()=>{
@@ -83,12 +86,8 @@ const [errors,setErrors] = useState({});
     }
 
     try{
-      await axios[method](url,productData);
-      if(modalType==="create"){
-        alert(`${productData.data.title}新增成功`);
-      }else{
-        alert(`${productData.data.title}更新成功`);
-      }
+      const res =await axios[method](url,productData);
+      dispatch(createAsyncMessage(res.data));
       closeModal();
       await getProducts();
     }catch(err){

@@ -6,6 +6,9 @@ const{VITE_API_BASE, VITE_API_PATH}=import.meta.env
 
 import Pagination from "../../components/Pagination";
 import ProductModal from "../../components/ProductModal";
+import { createAsyncMessage } from "../../slice/messageSlice";
+import { useDispatch } from "react-redux";
+
 
 const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH; 
@@ -29,6 +32,7 @@ function AdminProducts() {
   const [templateProduct,setTemplateProduct] = useState(INITIAL_PRODUCT_DATA);
   const productModalRef = useRef(null);
   const [modalType,setModalType] = useState("");
+  const dispatch = useDispatch();
 
   const getProducts = async (page=1) => {
     try {
@@ -37,6 +41,7 @@ function AdminProducts() {
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (err) {
+      dispatch(createAsyncMessage(err.response.data));
       console.log(err.response.data.message);
   }}
 
