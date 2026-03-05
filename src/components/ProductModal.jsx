@@ -97,9 +97,9 @@ const [errors,setErrors] = useState({});
 
   const deleteProduct = async(id)=>{
     try {
-      await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
+      const res = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
       closeModal();
-      alert("刪除成功");
+      dispatch(createAsyncMessage(res.data));
       await getProducts(current_page);
     } catch (err) {
       console.log(err.response.data.message);

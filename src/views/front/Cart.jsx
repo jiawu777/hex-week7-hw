@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect } from "react";
+import { createAsyncMessage } from "../../slice/messageSlice";
+import { useDispatch } from "react-redux";
 
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH;
-
+const dispatch = useDispatch;
 
 const Cart=({getCartItems, cart, updateCartQty, setCount,delAllLoadingState,setDelAllLoadingState,delLoadingState,setDelLoadingState}) => {
 
@@ -15,7 +17,7 @@ const Cart=({getCartItems, cart, updateCartQty, setCount,delAllLoadingState,setD
             setCount(1);
             await getCartItems();
         } catch (error) {
-            alert("清空購物車失敗:" + error.response.data.message);
+          dispatch(createAsyncMessage(error.response.data))
         }finally{
             setDelAllLoadingState(0);}
     }
@@ -29,7 +31,7 @@ const Cart=({getCartItems, cart, updateCartQty, setCount,delAllLoadingState,setD
             setCount(1);
             await getCartItems();
         } catch (error) {
-            alert("刪除商品失敗:" + error.response.data.message);
+          dispatch(createAsyncMessage(error.response.data));
         }finally{
             setDelLoadingState((prev)=>prev.filter((i)=> i !== id));
         }

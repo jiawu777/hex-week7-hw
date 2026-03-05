@@ -3,6 +3,8 @@ import '../../assets/styles.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import validation from '../../utils/validation';
+import { useDispatch } from 'react-redux';
+import { createAsyncMessage } from '../../slice/messageSlice';
 
 // API 設定
 const API_BASE = import.meta.env.VITE_API_BASE;
@@ -18,7 +20,7 @@ const {register,handleSubmit,formState:{isValid,errors}} = useForm({
 })
 
 const navigate= useNavigate();
-
+const dispatch = useDispatch;
 const onSubmit = async (formData) => {
 
   try {
@@ -33,7 +35,7 @@ const onSubmit = async (formData) => {
 
     navigate("/admin/products");
   } catch (error) {
-    alert("登入失敗: " + error.response.data.message);
+    dispatch(createAsyncMessage(error.response.data));
   }
 } 
 

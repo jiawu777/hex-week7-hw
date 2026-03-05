@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { createAsyncMessage } from "../../slice/messageSlice";
+import { useDispatch } from "react-redux";
 
 
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
@@ -8,14 +10,14 @@ const API_PATH = VITE_API_PATH;
 
 const Products = ({ handleQty, addCartLoadingState, openModal,moreLoadingState})=>{
 const [productData,setProductData]=useState([]);
-
+const dispatch = useDispatch;
 
 const getProducts = async()=>{
         try {
             const res = await axios.get(`${API_BASE}/api/${API_PATH}/products/all`);
             setProductData(res.data?.products);
         } catch (error) {
-            alert("取得商品資料失敗:" + error.response.data.message);
+            dispatch(createAsyncMessage(error.response.data));
         }
     }
 

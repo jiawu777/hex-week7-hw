@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination";
 import ProductModal from "../../components/ProductModal";
 import { createAsyncMessage } from "../../slice/messageSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 const API_BASE = VITE_API_BASE;
@@ -33,6 +34,7 @@ function AdminProducts() {
   const productModalRef = useRef(null);
   const [modalType,setModalType] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getProducts = async (page=1) => {
     try {
@@ -75,6 +77,17 @@ function AdminProducts() {
     
   }
 
+   const logout = async () => {
+      try {
+        const res = await axios.post(`${API_BASE}/logout`);
+        navigate("/");
+        dispatch(createAsyncMessage(res.data));
+      } catch (error) {
+        dispatch(createAsyncMessage(error.response.data));
+      }
+      
+    }
+
 useEffect(() => {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
@@ -109,6 +122,9 @@ useEffect(() => {
               onClick={()=>{              
                 openModal("create",INITIAL_PRODUCT_DATA);
               }}>建立新的產品</button>
+              <button type="button" className="btn btn-danger" onClick={logout}>
+                登出
+              </button>
             </div>
             <table className="table mt-4">
               <thead>

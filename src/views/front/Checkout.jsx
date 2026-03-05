@@ -6,6 +6,8 @@ import validation  from '../../utils/validation';
 import Products from './Products';
 import Cart from './Cart';
 import SingleProductModal from './SingleProductModal';
+import { createAsyncMessage } from '../../slice/messageSlice';
+import { useDispatch } from 'react-redux';
 
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
@@ -21,7 +23,7 @@ const Checkout = () => {
     const [productData,setProductData]=useState({});
     const {register, handleSubmit,formState:{errors,isValid},reset} = useForm({mode:"onChange",})
     const [ count, setCount ] = useState(1);
-
+    const dispatch = useDispatch;
     
 
      const getCartItems = async()=>{
@@ -30,7 +32,7 @@ const Checkout = () => {
             setCart(res.data.data);
             return res.data.data;
         } catch (error) {
-            alert("取得購物車資料失敗:" + error.response.data.message);
+            dispatch(createAsyncMessage(error.response.data));
         }
     }
 
@@ -44,7 +46,7 @@ const Checkout = () => {
                 await axios.post(`${API_BASE}/api/${API_PATH}/cart`,{data});
                 await getCartItems();
             } catch (error) {
-                alert("新增購物車商品失敗:" + error.response.data.message);
+                dispatch(createAsyncMessage(error.response.data));
             }
         }
 
@@ -58,7 +60,7 @@ const Checkout = () => {
                 setCount(1);
                 await getCartItems();
             } catch (error) {
-                alert("更新購物車商品數量失敗:" + error.response.data.message);
+                dispatch(createAsyncMessage(error.response.data));
             }
         }
 
@@ -83,7 +85,7 @@ const Checkout = () => {
                     await addNewCartItem(id,targetQty || 1)
                 }
             } catch (error) {
-                alert("處理購物車商品增減失敗:" + error.response.data.message);
+                dispatch(createAsyncMessage(error.response.data));
             }finally{
                 setCount(1);
                 setAddCartLoadingState((prev)=>{
@@ -106,11 +108,11 @@ const Checkout = () => {
         
             try {
                 const res = await axios.post(`${API_BASE}/api/${API_PATH}/order`,{data:dataToSend});
-                alert(res.data.message);
+                dispatch(createAsyncMessage(res.data));
                 reset();
                 getCartItems();
             } catch (error) {
-                alert("訂單傳送失敗:" + error.response.data.message);
+                dispatch(createAsyncMessage(error.response.data));
             }
     }
 
@@ -139,7 +141,7 @@ const Checkout = () => {
             await getSingleProduct(product.id);
             productModalRef.current.show();
         } catch (error) {
-            alert("開啟 Modal 失敗:" + error.response.data.message);
+            dispatch(createAsyncMessage(error.response.data));
         }finally{
             setMoreLoadingState((prev)=>{
                 return prev.filter((i)=> i !== product.id)
@@ -156,7 +158,7 @@ const Checkout = () => {
         try {
             await axios.get(`${API_BASE}/api/${API_PATH}/product/${id}`);
         } catch (error) {
-            alert("取得單一商品資料失敗:" + error.response.data.message);
+            dispatch(createAsyncMessage(error.response.data));
         }
     }
 
