@@ -1,11 +1,11 @@
 import { NavLink, Outlet } from "react-router-dom"
 
-const AdminLayout = ()=>{
-    return(
+const AdminLayout = () => {
+    return (
         <>
             <header>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
-                     <div className="container-fluid">
+                    <div className="container-fluid">
                         <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                             <ul className="navbar-nav">
                                 <li className="nav-item">
@@ -16,7 +16,7 @@ const AdminLayout = ()=>{
                     </div>
                 </nav>
             </header>
-            <Outlet/>
+            <Outlet />
             <footer>2026 Jia Demo</footer>
         </>
     )

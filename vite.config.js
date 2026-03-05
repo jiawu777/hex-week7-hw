@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base:"/hex-week6-hw/",
+  base:"/hex-week7-hw/",
   plugins: [react()],
 })
