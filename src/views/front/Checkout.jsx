@@ -6,8 +6,7 @@ import validation  from '../../utils/validation';
 import Products from './Products';
 import Cart from './Cart';
 import SingleProductModal from './SingleProductModal';
-import { createAsyncMessage } from '../../slice/messageSlice';
-import { useDispatch } from 'react-redux';
+import { useMessage } from '../../hooks/useMessage';
 
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
@@ -23,7 +22,7 @@ const Checkout = () => {
     const [productData,setProductData]=useState({});
     const {register, handleSubmit,formState:{errors,isValid},reset} = useForm({mode:"onChange",})
     const [ count, setCount ] = useState(1);
-    const dispatch = useDispatch;
+    const {showSuccess, showError} = useMessage();
     
 
      const getCartItems = async()=>{
@@ -32,7 +31,7 @@ const Checkout = () => {
             setCart(res.data.data);
             return res.data.data;
         } catch (error) {
-            dispatch(createAsyncMessage(error.response.data));
+            showError(error.response.data);
         }
     }
 
@@ -46,7 +45,7 @@ const Checkout = () => {
                 await axios.post(`${API_BASE}/api/${API_PATH}/cart`,{data});
                 await getCartItems();
             } catch (error) {
-                dispatch(createAsyncMessage(error.response.data));
+                showError(error.response.data);
             }
         }
 
@@ -60,7 +59,7 @@ const Checkout = () => {
                 setCount(1);
                 await getCartItems();
             } catch (error) {
-                dispatch(createAsyncMessage(error.response.data));
+                showError(error.response.data);
             }
         }
 
@@ -85,7 +84,7 @@ const Checkout = () => {
                     await addNewCartItem(id,targetQty || 1)
                 }
             } catch (error) {
-                dispatch(createAsyncMessage(error.response.data));
+                showError(error.response.data);
             }finally{
                 setCount(1);
                 setAddCartLoadingState((prev)=>{
@@ -96,6 +95,7 @@ const Checkout = () => {
     }
 
     const onSubmitOrders = async(data) =>{
+
         const dataToSend = {
                 user: {
                 name: data.name,
@@ -105,15 +105,27 @@ const Checkout = () => {
                 },
                 message: data.message
                 }
-        
-            try {
-                const res = await axios.post(`${API_BASE}/api/${API_PATH}/order`,{data:dataToSend});
-                dispatch(createAsyncMessage(res.data));
-                reset();
-                getCartItems();
-            } catch (error) {
-                dispatch(createAsyncMessage(error.response.data));
-            }
+
+                if(cart.carts.length<= 0){
+                    return showError("購物車無內容，請添加後再送出訂單");
+                }
+                    try {
+                        const res = await axios.post(`${API_BASE}/api/${API_PATH}/order`,{data:dataToSend});
+                        showSuccess(res.data.message)
+                            reset({
+                                name: '',
+                                email: '',
+                                tel: '',
+                                address: '',
+                                message: ''
+                            }
+                        );
+                        getCartItems();
+                    } catch (error) {
+                        showError(error.response.data);
+                    }
+                
+            
     }
 
     useEffect(()=>{
@@ -141,7 +153,7 @@ const Checkout = () => {
             await getSingleProduct(product.id);
             productModalRef.current.show();
         } catch (error) {
-            dispatch(createAsyncMessage(error.response.data));
+            showError(error.response.data);
         }finally{
             setMoreLoadingState((prev)=>{
                 return prev.filter((i)=> i !== product.id)
@@ -158,7 +170,7 @@ const Checkout = () => {
         try {
             await axios.get(`${API_BASE}/api/${API_PATH}/product/${id}`);
         } catch (error) {
-            dispatch(createAsyncMessage(error.response.data));
+            showError(error.response.data);
         }
     }
 

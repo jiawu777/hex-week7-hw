@@ -1,23 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { createAsyncMessage } from "../../slice/messageSlice";
-import { useDispatch } from "react-redux";
-
-
+import { useMessage } from "../../hooks/useMessage";
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH;
 
 const Products = ({ handleQty, addCartLoadingState, openModal,moreLoadingState})=>{
 const [productData,setProductData]=useState([]);
-const dispatch = useDispatch;
-
+const {shoeSuccess, showError} = useMessage();
 const getProducts = async()=>{
         try {
             const res = await axios.get(`${API_BASE}/api/${API_PATH}/products/all`);
             setProductData(res.data?.products);
         } catch (error) {
-            dispatch(createAsyncMessage(error.response.data));
+            showError(error.response.data);
         }
     }
 

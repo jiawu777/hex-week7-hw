@@ -3,14 +3,13 @@ import '../../assets/styles.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import validation from '../../utils/validation';
-import { useDispatch } from 'react-redux';
-import { createAsyncMessage } from '../../slice/messageSlice';
-
+import { useMessage } from '../../hooks/useMessage';
 // API 設定
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 //上傳要改
 const Login = () => {
+const {shoeSuccess, showError} = useMessage();
 const {register,handleSubmit,formState:{isValid,errors}} = useForm({
   mode:"onBlur",
   defaultValues:{
@@ -20,7 +19,6 @@ const {register,handleSubmit,formState:{isValid,errors}} = useForm({
 })
 
 const navigate= useNavigate();
-const dispatch = useDispatch;
 const onSubmit = async (formData) => {
 
   try {
@@ -35,7 +33,7 @@ const onSubmit = async (formData) => {
 
     navigate("/admin/products");
   } catch (error) {
-    dispatch(createAsyncMessage(error.response.data));
+    showError(error.response.data);
   }
 } 
 

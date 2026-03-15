@@ -1,37 +1,38 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { createAsyncMessage } from "../../slice/messageSlice";
-import { useDispatch } from "react-redux";
-
+import { useMessage } from "../../hooks/useMessage";
 const {VITE_API_BASE, VITE_API_PATH}=import.meta.env
 const API_BASE = VITE_API_BASE;
 const API_PATH = VITE_API_PATH;
-const dispatch = useDispatch;
 
 const Cart=({getCartItems, cart, updateCartQty, setCount,delAllLoadingState,setDelAllLoadingState,delLoadingState,setDelLoadingState}) => {
-
+const {showSuccess, showError} = useMessage();
     const deleteAllCartItems = async()=>{
       setDelAllLoadingState(1);
         try {
             await axios.delete(`${API_BASE}/api/${API_PATH}/carts`);
             setCount(1);
             await getCartItems();
+            showSuccess("清空購物車成功");
         } catch (error) {
-          dispatch(createAsyncMessage(error.response.data))
+          showError(error.response.data)
         }finally{
             setDelAllLoadingState(0);}
     }
 
 
         const deleteCartItem = async(id)=>{
-
+        const cartItem = cart?.carts?.find((item)=>{
+          return(item.id===id)
+        })
         try {
             setDelLoadingState((prev)=>[...prev,id]);
             await axios.delete(`${API_BASE}/api/${API_PATH}/cart/${id}`);
             setCount(1);
+            showSuccess(`刪除${cartItem?.product?.title}成功!`);
             await getCartItems();
         } catch (error) {
-          dispatch(createAsyncMessage(error.response.data));
+          showError(error.response.data);
         }finally{
             setDelLoadingState((prev)=>prev.filter((i)=> i !== id));
         }

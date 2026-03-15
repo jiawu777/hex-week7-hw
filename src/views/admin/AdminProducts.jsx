@@ -6,8 +6,7 @@ const{VITE_API_BASE, VITE_API_PATH}=import.meta.env
 
 import Pagination from "../../components/Pagination";
 import ProductModal from "../../components/ProductModal";
-import { createAsyncMessage } from "../../slice/messageSlice";
-import { useDispatch } from "react-redux";
+import { useMessage } from "../../hooks/useMessage";
 import { useNavigate } from "react-router-dom";
 
 
@@ -33,8 +32,9 @@ function AdminProducts() {
   const [templateProduct,setTemplateProduct] = useState(INITIAL_PRODUCT_DATA);
   const productModalRef = useRef(null);
   const [modalType,setModalType] = useState("");
-  const dispatch = useDispatch();
+  const {showSuccess, showError} = useMessage();
   const navigate = useNavigate();
+  
 
   const getProducts = async (page=1) => {
     try {
@@ -81,9 +81,9 @@ function AdminProducts() {
       try {
         const res = await axios.post(`${API_BASE}/logout`);
         navigate("/");
-        dispatch(createAsyncMessage(res.data));
+        showSuccess(res.data.message)
       } catch (error) {
-        dispatch(createAsyncMessage(error.response.data));
+        showError(error.response.data);
       }
       
     }

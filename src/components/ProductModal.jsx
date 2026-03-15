@@ -87,7 +87,7 @@ const [errors,setErrors] = useState({});
 
     try{
       const res =await axios[method](url,productData);
-      dispatch(createAsyncMessage(res.data));
+      showSuccess(res.data.message)
       closeModal();
       await getProducts();
     }catch(err){
@@ -99,7 +99,7 @@ const [errors,setErrors] = useState({});
     try {
       const res = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
       closeModal();
-      dispatch(createAsyncMessage(res.data));
+      showSuccess(res.data.message)
       await getProducts(current_page);
     } catch (err) {
       console.log(err.response.data.message);
