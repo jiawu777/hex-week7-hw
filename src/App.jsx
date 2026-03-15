@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
-import'./App.css'
+import'./assets/App.css'
 import MessageToast from './components/MessageToast';
 
 function App() {

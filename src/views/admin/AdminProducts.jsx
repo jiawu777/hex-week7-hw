@@ -43,8 +43,7 @@ function AdminProducts() {
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (err) {
-      dispatch(createAsyncMessage(err.response.data));
-      console.log(err.response.data.message);
+      showError(err.response.data.message);
   }}
 
   const openModal = (type,product) => {
@@ -69,7 +68,7 @@ function AdminProducts() {
       const imageUrl = response.data.imageUrl;
       setTemplateProduct((pre)=>({...pre,imageUrl})); 
     } catch (error) {
-      console.log(error.response.data);
+      showError(error.response.data)
     }finally{
       //清空input的值，讓使用者可以上傳同一張圖片
       e.target.value="";

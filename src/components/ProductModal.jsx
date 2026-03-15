@@ -1,15 +1,15 @@
 import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { createAsyncMessage } from "../slice/messageSlice";
+import { useMessage } from "../hooks/useMessage"
 
 const ProductModal =({API_BASE,API_PATH,modalType,templateProduct,closeModal,getProducts,productModalRef,handleFileChange,pagination})=>{
 const defaultImageUrl="https://storage.googleapis.com/vue-course-api.appspot.com/jia-hex/1770819402945.jpg";
 const {current_page = 1} = pagination;
-const dispatch = useDispatch();
 const [tempData,setTempData] = React.useState(templateProduct);
 const [errors,setErrors] = useState({});
+const {showSuccess, showError}=useMessage();
+
   useEffect(()=>{
     setTempData(templateProduct);
   },[templateProduct])
@@ -87,7 +87,7 @@ const [errors,setErrors] = useState({});
 
     try{
       const res =await axios[method](url,productData);
-      showSuccess(res.data.message)
+      showSuccess(res.data.message);
       closeModal();
       await getProducts();
     }catch(err){
@@ -99,10 +99,10 @@ const [errors,setErrors] = useState({});
     try {
       const res = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
       closeModal();
-      showSuccess(res.data.message)
+      showSuccess(res.data.message);
       await getProducts(current_page);
     } catch (err) {
-      console.log(err.response.data.message);
+      showError(err.response.data.message);
     }
   }
 
