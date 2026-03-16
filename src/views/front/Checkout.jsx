@@ -31,7 +31,7 @@ const Checkout = () => {
             setCart(res.data.data);
             return res.data.data;
         } catch (error) {
-            showError(error.response.data);
+            showError(error.response.data.message);
         }
     }
 
@@ -45,7 +45,7 @@ const Checkout = () => {
                 await axios.post(`${API_BASE}/api/${API_PATH}/cart`,{data});
                 await getCartItems();
             } catch (error) {
-                showError(error.response.data);
+                showError(error.response.data.message);
             }
         }
 
@@ -59,7 +59,7 @@ const Checkout = () => {
                 setCount(1);
                 await getCartItems();
             } catch (error) {
-                showError(error.response.data);
+                showError(error.response.data.message);
             }
         }
 
@@ -84,7 +84,7 @@ const Checkout = () => {
                     await addNewCartItem(id,targetQty || 1)
                 }
             } catch (error) {
-                showError(error.response.data);
+                showError(error.response.data.message);
             }finally{
                 setCount(1);
                 setAddCartLoadingState((prev)=>{
@@ -122,7 +122,7 @@ const Checkout = () => {
                         );
                         getCartItems();
                     } catch (error) {
-                        showError(error.response.data);
+                        showError(error.response.data.message);
                     }
                 
             
@@ -153,7 +153,7 @@ const Checkout = () => {
             await getSingleProduct(product.id);
             productModalRef.current.show();
         } catch (error) {
-            showError(error.response.data);
+            showError(error.response.data.message);
         }finally{
             setMoreLoadingState((prev)=>{
                 return prev.filter((i)=> i !== product.id)
@@ -170,7 +170,7 @@ const Checkout = () => {
         try {
             await axios.get(`${API_BASE}/api/${API_PATH}/product/${id}`);
         } catch (error) {
-            showError(error.response.data);
+            showError(error.response.data.message);
         }
     }
 

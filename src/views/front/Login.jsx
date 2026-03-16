@@ -9,7 +9,7 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 
 //上傳要改
 const Login = () => {
-const {shoeSuccess, showError} = useMessage();
+const {showSuccess, showError} = useMessage();
 const {register,handleSubmit,formState:{isValid,errors}} = useForm({
   mode:"onBlur",
   defaultValues:{
@@ -33,7 +33,7 @@ const onSubmit = async (formData) => {
 
     navigate("/admin/products");
   } catch (error) {
-    showError(error.response.data);
+    showError(error.response.data.message);
   }
 } 
 

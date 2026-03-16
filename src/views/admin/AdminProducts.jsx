@@ -82,7 +82,7 @@ function AdminProducts() {
         navigate("/");
         showSuccess(res.data.message)
       } catch (error) {
-        showError(error.response.data);
+        showError(error.response.data.message);
       }
       
     }

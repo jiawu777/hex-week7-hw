@@ -32,7 +32,7 @@ const {showSuccess, showError} = useMessage();
             showSuccess(`刪除${cartItem?.product?.title}成功!`);
             await getCartItems();
         } catch (error) {
-          showError(error.response.data);
+          showError(error.response.data.message);
         }finally{
             setDelLoadingState((prev)=>prev.filter((i)=> i !== id));
         }

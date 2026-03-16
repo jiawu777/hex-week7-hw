@@ -13,7 +13,7 @@ const getProducts = async()=>{
             const res = await axios.get(`${API_BASE}/api/${API_PATH}/products/all`);
             setProductData(res.data?.products);
         } catch (error) {
-            showError(error.response.data);
+            showError(error.response.data.message);
         }
     }
 
