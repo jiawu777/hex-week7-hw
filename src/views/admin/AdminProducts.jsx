@@ -83,8 +83,9 @@ function AdminProducts() {
         showSuccess(res.data.message)
       } catch (error) {
         showError(error.response.data.message);
+      }finally{
+        document.cookie=`hexToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
       }
-      
     }
 
 useEffect(() => {

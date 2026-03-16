@@ -29,7 +29,7 @@ const onSubmit = async (formData) => {
 
 
     // 修改實體建立時所指派的預設配置
-    axios.defaults.headers.common['Authorization'] = token;
+    // axios.defaults.headers.common['Authorization'] = token;
 
     navigate("/admin/products");
   } catch (error) {
